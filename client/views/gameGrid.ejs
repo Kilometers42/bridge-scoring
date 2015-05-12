@@ -1,0 +1,14 @@
+hi
+<div class="content-container-fluid" ng-controller= "game.controller.grid">
+    <div class="row">
+        <div class="cols-sample-area" style="height:550px">
+            <div ng-if="loaded">
+                <div id="Grid" ej-grid e-datasource="data"  e-pagesettings-pagesize="9" e-allowpaging="true" e-allowtextwrap="true" e-allowresizing="true" e-columns="columns" 
+                e-detailstemplate = "'<div id=&quot;innerGrid&quot;></div> <h1>test</h1>'" e-detailsdatabound="'boardDetails'" e-editsettings="editSettings" e-toolbarsettings= "toolbarSettings">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
