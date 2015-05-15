@@ -1,14 +1,42 @@
 hi
 <div class="content-container-fluid" ng-controller= "game.controller.grid">
     <div class="row">
-        <div class="cols-sample-area" style="height:550px">
+        <div class="cols-sample-area">
             <div ng-if="loaded">
                 <div id="Grid" ej-grid e-datasource="data"  e-pagesettings-pagesize="9" e-allowpaging="true" e-allowtextwrap="true" e-allowresizing="true" e-columns="columns" 
-                e-detailstemplate = "'<div id=&quot;innerGrid&quot;></div> <h1>test</h1>'" e-detailsdatabound="'boardDetails'" e-editsettings="editSettings" e-toolbarsettings= "toolbarSettings">
+                e-detailstemplate = "#treeTemplate" e-detailsdatabound="boardDetails" e-editsettings="editSettings" e-toolbarsettings= "toolbarSettings">
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
+<script id="treeTemplate" type="text/x-jsrender">
+    <center>
+        <table style='width: 350px' align='center' frame='border' cellpadding='10' width='400' style='font-size:120%' >
+            <tr>
+                <td> Dealer: {{>dealer}}<br/> Vul: {{>vulnerable}} <br/> </td>
+                <td> <i>North</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>nHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>nHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>nHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>nHand.clubs}}</font> </td>
+                 <td> </td>
+            </tr>
+            <tr>
+                <td> <i>West</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>wHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>wHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>wHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>wHand.clubs}}</font> </td>
+                <td> </td>
+                <td> <i>East</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>eHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>eHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>eHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>eHand.clubs}}</font> </td>
+            </tr>
+            <tr>
+                <td> </td>
+                <td> <i>South</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>sHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>sHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>sHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>sHand.clubs}}</font> </td>
+                <td> </td>
+             </tr>
+        </table>
+        <p>
+        {{for doubleDummy.results }}
+        {{>#data}}; 
+        {{/for}}
+        Par: {{>doubleDummy.parScore}}: {{>doubleDummy.parContract}} 
+        </p>
+        
+    </center>
+        <div id='innerGrid'></div>
+</script>

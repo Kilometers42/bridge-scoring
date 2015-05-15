@@ -6,12 +6,6 @@ angular.module('game.controllers', ['ejangular'])
     function($scope, selectedId, read){
         $scope.selectedId = selectedId;    
         $scope.loaded = false;
-        // var promise = ej.DataManager({ url: "/game/read", offline: true });
-        // promise.ready.done(function (e) {
-        //      $scope.data = ej.DataManager({ json: e.result, updateUrl: '/game/update', adaptor: 'remoteSaveAdaptor' })
-        //      $scope.loaded = true;
-        //      $scope.$apply();
-        //  })
         $scope.selectedId.callback = function(){
             read.query({id: $scope.selectedId.id}, function (e) {
                 $scope.data = ej.DataManager({ json: e, updateUrl: '/game/update', adaptor: 'remoteSaveAdaptor' })
@@ -55,7 +49,24 @@ angular.module('game.controllers', ['ejangular'])
                 }
             },  width: 200 },
             { field: "notes", headerText: 'Notes' },
-        ]
+        ];
+        
+        
+        $scope.boardDetails = function(e) {
+            e.detailsElement.find("#innerGrid").ejGrid({
+                dataSource: e.data.result.table,
+                columns: [
+                                            { field: "teams", headerText: "Teams", isPrimaryKey: true, },
+                                            { field: "contract", headerText: "Contract", width: 90 },
+                                            { field: "declarer", headerText: "Declarer", width: 75 },
+                                            { field: "lead", headerText: "Lead", width: 75},
+                                            { field: "made", headerText: "Made", width: 100 },
+                                            { field: "score", headerText: 'Score', width: 100 },
+                                            { field: "nsPoints", headerText: "NSPoints", width: 100 },
+                                            { field: "ewPoints", headerText: 'EWPoints', width: 100 }
+                ]
+            });
+        }
     }
 ])
         
@@ -64,6 +75,7 @@ angular.module('game.controllers', ['ejangular'])
     'game.services.save',
     'game.services.selected',
     function($scope, saveMatch, selectedId){
+        $scope.disableSave =false;
         $scope.newGame = {};
         $scope.selectedId = selectedId;
         
@@ -75,7 +87,7 @@ angular.module('game.controllers', ['ejangular'])
         
         $scope.submit = function(newGame){
             saveMatch.post(newGame, function(){
-                $scope.data = $scope.data.constructor();
+                // $scope.data = $scope.data.constructor();
             });
             
         }
@@ -87,21 +99,3 @@ angular.module('game.controllers', ['ejangular'])
         
     }
 ]);
-
-        function boardDetails(e){
-             e.detailsElement.find("#innerGrid").ejGrid({
-                dataSource: e.data.result.table,
-                // allowPaging: true,
-                // pageSettings: { pageSize: 9 },
-                columns: [
-                                            { field: "teams", headerText: "teams", isPrimaryKey: true, width: 75,  textAlign: ej.TextAlign.Right },
-                                            { field: "contract", headerText: "contract", width: 90 },
-                                            { field: "declarer", headerText: "declarer", textAlign: ej.TextAlign.Right, width: 75 },
-                                            { field: "lead", headerText: "lead", textAlign: ej.TextAlign.Right, width: 75},
-                                            { field: "made", headerText: "made", width: 100 },
-                                            { field: "score", headerText: 'score', width: 100 },
-                                            { field: "nsPoints", headerText: "nsPoints", width: 100 },
-                                            { field: "ewPoints", headerText: 'ewPoints', width: 100 }
-                ]
-            });
-        }

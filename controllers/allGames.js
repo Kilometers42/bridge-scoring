@@ -2,7 +2,7 @@ var express = require("express");
 var gameRepository = require('../repositories/gameRepository.js');
 var router = express();
 var parser = require("../logic/parser.js");
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
@@ -23,6 +23,6 @@ router.post('/create', function(request, response) {
         });
     });
     
-})
+});
 
-module.exports= router;
+module.exports = router;

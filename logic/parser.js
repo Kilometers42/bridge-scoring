@@ -1,35 +1,102 @@
-
 var cheerio = require('cheerio');
 var request = require('request');
 var analyzer = require('../logic/analyzer.js');
 
-
-
 module.exports = { 
     parse: function (newGame, cb){
-        var game = {boards: []};
-        request(newGame.url, function (error, response, html) {
-          
-          if (!error && response.statusCode == 200) 
-          {
-            var $ = cheerio.load(html);
-            var doubleDummyHtml = $('.bcdda');
-            var resultsHtml = $('table.bcst');
-            for(var i = 0; i < doubleDummyHtml.length; i++ )
-            {
-                var board = {number: i + 1, result:{}};
-                board.result =  NodeTree(resultsHtml[i].children, ResultsTableObject, true);
-                var x =  NodeTree(doubleDummyHtml[i].children, DoubleDummyObject);
-                console.log(x);
-                board.doubleDummy = x;
-                game.boards[i+1] = board;
-            }
+      var game = {boards: []};
+      request(newGame.url, function (error, response, html) {
+        if (!error && response.statusCode == 200) {
+          var $ = cheerio.load(html);
+          var doubleDummyHtml = $('.bcdda');
+          var resultsHtml = $('table.bcst');
+          var handHtml = $('table.bchand').find('tr');
+          for(var i = 0; i < doubleDummyHtml.length; i++ ){
+            var board = {number: i + 1, result:{}};
+            board.result =  NodeTree(resultsHtml[i].children, ResultsTableObject, true);
+            var x =  NodeTree(doubleDummyHtml[i].children, DoubleDummyObject);
+            board.doubleDummy = x;
+            setDealerVul(board, i);
+            game.boards[i+1] = board;
           }
-          game.url = newGame.url;
-          analyzer.analyze(setupTeam(game, newGame.number, newGame.direction), function(){cb(game)});
-        });
+          createHands(game, handHtml);
+        }
+        game.url = newGame.url;
+        analyzer.analyze(setupTeam(game, newGame.number, newGame.direction), function(){cb(game)});
+      });
     }
+
 };
+
+
+function createHands(game, handHtml){
+  var boardCounter = 0;
+  var hand;
+  for (var i = 0; i < handHtml.length; i++ ) {
+    switch(i%16){
+      case 0:
+        boardCounter++;
+        game.boards[boardCounter].nHand ={}
+        hand = game.boards[boardCounter].nHand
+        break;
+      case 4:
+        game.boards[boardCounter].wHand ={}
+        hand = game.boards[boardCounter].wHand
+        break;
+      case 8:
+        game.boards[boardCounter].eHand ={}
+        hand = game.boards[boardCounter].eHand
+        break;
+      case 12:
+        game.boards[boardCounter].sHand ={}
+        hand = game.boards[boardCounter].sHand
+        break;
+    }
+    switch (i%4) {
+      case 0:
+        hand.spades = NodeTree(handHtml[i].children, cleanSuit);
+        break;
+      case 1:
+        hand.hearts = NodeTree(handHtml[i].children, cleanSuit);
+        break;
+      case 2:
+        hand.diamonds = NodeTree(handHtml[i].children, cleanSuit);
+        break;
+      case 3:
+        hand.clubs = NodeTree(handHtml[i].children, cleanSuit);
+        break;
+    } 
+  }
+}
+
+
+function setDealerVul(board, boardNumber){
+  switch (boardNumber%4) {
+    case 0:
+      board.dealer = 'North';
+      board.vulnerable = 'None';
+      break;
+    case 1:
+      board.dealer = 'East';
+      board.vulnerable = 'North South';
+      break;
+    case 2:
+      board.dealer = 'South';
+      board.vulnerable = 'East West';
+      break;
+    case 3:
+      board.dealer = 'West';
+      board.vulnerable = 'All';
+      break;
+  }
+}
+
+function cleanSuit(suit){
+  suit = suit.replace(/[♠♥♦♣]/g,"");
+  suit = suit.trim();
+  return suit.split(' ');
+}
+
 
 function NodeTree(nodes, createObjectFunction, separators){
   separators = separators || false;

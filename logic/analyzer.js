@@ -1,3 +1,5 @@
+var fs = require("fs");
+var exec = require('child_process').exec;
 module.exports = { 
     analyze: function (game, cb){
         console.log(game);
@@ -33,8 +35,35 @@ module.exports = {
                         }
                     }
                 }
-            }
             
+                
+                var pbnString= '[Deal "N:';
+                pbnString=pbnString + curBoard.nHand.spades+'.'+curBoard.nHand.hearts+'.'+curBoard.nHand.diamonds+'.'+curBoard.nHand.clubs+' ';
+                pbnString=pbnString + curBoard.eHand.spades+'.'+curBoard.eHand.hearts+'.'+curBoard.eHand.diamonds+'.'+curBoard.eHand.clubs+' ';
+                pbnString=pbnString + curBoard.sHand.spades+'.'+curBoard.sHand.hearts+'.'+curBoard.sHand.diamonds+'.'+curBoard.sHand.clubs+' ';
+                pbnString=pbnString + curBoard.wHand.spades+'.'+curBoard.wHand.hearts+'.'+curBoard.wHand.diamonds+'.'+curBoard.wHand.clubs;
+                pbnString = pbnString.replace(/,/g, '');
+                pbnString = pbnString.replace(/10/g, 'T');
+                pbnString = pbnString + '"]';
+                console.log(pbnString);
+                var fileName = 'test' + i +'.pbn'
+                
+                // fs.writeFile("/home/ubuntu/workspace/logic/"+ fileName, pbnString, function(err) {
+                //     if(err) {
+                //         return console.log(err);
+                //     }
+                //     setTimeout( function() {
+                //     exec('cd /home/ubuntu/workspace/logic ;wine leadsolver.exe -p 3N '+fileName, function (error, stdout, stderr) {
+                //         console.log('here')
+                //         console.log(stdout)
+                //         console.log(error)
+                //     })}, 5000)
+                    
+                //     console.log("The file was saved!");
+                    
+                    
+                // });
+            }
         }
         cb(game);
     }        

@@ -1,6 +1,4 @@
 var resultUrl = 'http://clubresults.acbl.org/Results/262592/2015/03/150318E.HTM';
-// var resultUrl = 'http://clubresults.acbl.org/Results/113019/2015/04/150427E.HTM'; //Mom
-//var resultUrl = 'http://www.tcbridgecenter.com/dailies/thue.htm';
 var parser = require("../logic/parser.js");
 var express = require("express");
 var gameRepository = require('../repositories/gameRepository.js');
@@ -8,9 +6,8 @@ var router = express();
 var bodyParser = require('body-parser')
 router.use( bodyParser.json() );       // to support JSON-encoded bodies
 router.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
+    extended: true
 })); 
-
 
 router.get('/read', function(request, response){	
     gameRepository.readBoards(request.query, function(allGames){
@@ -24,9 +21,9 @@ router.get('/read', function(request, response){
 
 router.get('/create', function(request, response) {
     parser.parse(resultUrl, function(game){
-        gameRepository.save(game, function (argument) {
-           response.json({success: 'true'});
-        });
+        // gameRepository.save(game, function (argument) {
+        //   response.json({success: 'true'});
+        // });
     });
 })
 
@@ -42,6 +39,5 @@ router.post('/update', function(request, response) {
    
    
 })
-
 
 module.exports = router;

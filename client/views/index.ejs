@@ -46,7 +46,7 @@
                     Url <input type="text" ng-model="newGame.url" /><br />
                     Team Number <input type="text" ng-model="newGame.number" /><br />
                     Direction <input type="text" ng-model="newGame.direction" /><br />
-                    <input type="submit" ng-click="submit(newGame)" value="Save" />
+                    <input type="submit" ng-click="submit(newGame); disableSave = false" value="Save" ng-disabled='disableSave'/>
                 </form>
             </div>
             <div id= "Game" >
