@@ -1,4 +1,5 @@
 var fs = require("fs");
+var addon = require('./build/Release/addon')
 var exec = require('child_process').exec;
 module.exports = { 
     analyze: function (game, cb){
@@ -12,26 +13,27 @@ module.exports = {
                     var matches = game.boards[i].doubleDummy.results.filter(function(str) {
                         return str.search(test)>=0;
                     });
-                    
-                    var numberMade; 
-                    if (game.boards[i].made > 0) {
-                        numberMade = parseInt(game.boards[i].made);
-                    } else{
-                        numberMade = parseInt(game.boards[i].contract.match(/\d/)[0]) - parseInt(game.boards[i].made.match(/\d/)[0]);    
-                    }
-                    var shouldMake = matches[0].match(/\d+/)[0];
-                    game.boards[i].analysis = [];
-                    if (matches[0].match(game.direction)!= null) {
-                        if(shouldMake - numberMade > 0){
-                            game.boards[i].analysis.push('Misplayed');
-                        }else if(shouldMake - numberMade < 0 ){
-                            game.boards[i].analysis.push('WellPlayed')                            
+                    if(matches.length != 0){
+                        var numberMade; 
+                        if (game.boards[i].made > 0) {
+                            numberMade = parseInt(game.boards[i].made);
+                        } else{
+                            numberMade = parseInt(game.boards[i].contract.match(/\d/)[0]) - parseInt(game.boards[i].made.match(/\d/)[0]);    
                         }
-                    } else {
-                        if(shouldMake - numberMade > 0){
-                            game.boards[i].analysis.push('Good Defense');
-                        }else if(shouldMake - numberMade < 0 ){
-                            game.boards[i].analysis.push('Misdefended')                            
+                        var shouldMake = matches[0].match(/\d+/)[0];
+                        game.boards[i].analysis = [];
+                        if (matches[0].match(game.direction)!= null) {
+                            if(shouldMake - numberMade > 0){
+                                game.boards[i].analysis.push('Misplayed');
+                            }else if(shouldMake - numberMade < 0 ){
+                                game.boards[i].analysis.push('WellPlayed')                            
+                            }
+                        } else {
+                            if(shouldMake - numberMade > 0){
+                                game.boards[i].analysis.push('Good Defense');
+                            }else if(shouldMake - numberMade < 0 ){
+                                game.boards[i].analysis.push('Misdefended')                            
+                            }
                         }
                     }
                 }
@@ -44,25 +46,31 @@ module.exports = {
                 pbnString=pbnString + curBoard.wHand.spades+'.'+curBoard.wHand.hearts+'.'+curBoard.wHand.diamonds+'.'+curBoard.wHand.clubs;
                 pbnString = pbnString.replace(/,/g, '');
                 pbnString = pbnString.replace(/10/g, 'T');
+                pbnString = pbnString.replace(/—/g, '');
                 pbnString = pbnString + '"]';
                 console.log(pbnString);
-                var fileName = 'test' + i +'.pbn'
+                var leaderArray = ['N','E','S','W'];
+                var declarerLoc = leaderArray.indexOf(curBoard.declarer);
+                var leader = (declarerLoc+1)%4;
+                var altContract;
                 
-                // fs.writeFile("/home/ubuntu/workspace/logic/"+ fileName, pbnString, function(err) {
-                //     if(err) {
-                //         return console.log(err);
-                //     }
-                //     setTimeout( function() {
-                //     exec('cd /home/ubuntu/workspace/logic ;wine leadsolver.exe -p 3N '+fileName, function (error, stdout, stderr) {
-                //         console.log('here')
-                //         console.log(stdout)
-                //         console.log(error)
-                //     })}, 5000)
-                    
-                //     console.log("The file was saved!");
-                    
-                    
-                // });
+                altContract = curContract.slice(0,2);
+                altContract = altContract.replace(/♠/,'S');
+                altContract = altContract.replace(/♣/,'C');
+                altContract = altContract.replace(/♦/,'D');
+                altContract = altContract.replace(/♥/,'H');
+                
+                
+
+                console.log(leader);
+                console.log(altContract);
+                
+                addon(pbnString,leader,altContract,function(msg){
+
+                var arr = Object.keys(msg).map(function(k) { return msg[k] });
+                    console.log(arr)
+                })
+
             }
         }
         cb(game);

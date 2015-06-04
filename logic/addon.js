@@ -1,8 +1,8 @@
 var addon = require('./build/Release/addon')
 
-var hand= "[Deal \"N:95.984.AKJ75.953 QJ762.J72.T6.J74 KT43.AKQ.Q9.AK62 A8.T653.8432.QT8\"]";
+var hand= "[Deal \"N:AQ76.QT9754..AQ6 KJ432.83.J875.87 T98.2.KQ92.KJT52 5.AKJ6.AT643.943\"]";
 var leader = 1;
-var contract = "4H";
+var contract = "2H";
 addon(hand,leader,contract,function(msg){
     console.log(msg);
     console.log(msg[2]);

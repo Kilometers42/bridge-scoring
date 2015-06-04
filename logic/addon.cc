@@ -555,7 +555,7 @@ NAN_METHOD(FindBestLead) {
   	resultsArray[i] = result;
   	Local<Object> obj = NanNew<Object>();
     obj->Set(NanNew("lead"), temp);
-    obj->Set(NanNew("numberMade"), NanNew(result.nunmberMade) );
+    obj->Set(NanNew("numberMade"), NanNew( lx->avgTricks) );
     results->Set(NanNew(i),obj);
     
   }

@@ -17,7 +17,7 @@ router.get('/read', function(request, response){
 
 router.post('/create', function(request, response) {
     parser.parse(request.body, function(game){
-        gameRepository.save(game, function (argument) {
+         gameRepository.save(game, function (argument) {
           response.json({success: 'true'});
           response.end();
         });
