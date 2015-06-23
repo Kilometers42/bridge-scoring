@@ -36,7 +36,7 @@ angular.module('game.controllers', ['ejangular'])
                 write: function (args) {
                     
                     var ddl = args.element.ejDropDownList({
-                        dataSource:   [{tag: 'Misplayed'} , {tag: 'Well Played'}, {tag: 'Good Defense'}, {tag: 'Misdefended'}],
+                        dataSource:   [{tag: 'Misplayed'} , {tag: 'Well Played'}, {tag: 'Good Defense'}, {tag: 'Misdefended'}, {tag:'Helpful Lead'}, {tag:'Harmful Lead'}],
                         fields: { text: "tag", value: "tag", id: "tag"  },
                         allowMultiSelection: true,
                         showCheckbox: true,

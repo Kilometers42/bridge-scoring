@@ -1,0 +1,30 @@
+    <!--<div ng-controller="game.controller.tab">-->
+
+        <div id="tab" ej-tab compile-tab class="tab-container">
+            <ul>
+                <li><a href="#Select">Select a Game</a></li>
+                <li><a href="#Game">Game</a></li>
+            </ul>
+            <div id="Select">
+                <h2>Pick a game</h2>
+                <div class="content-container-fluid">
+                    <div class="row">
+                        <div id="AllGameGrid" ej-grid e-datasource="data"  e-pagesettings-pagesize="9" e-allowpaging="true" e-allowtextwrap="true" e-allowresizing="true" 
+                        e-columns="cols" e-rowselected="updateItem">
+                        </div>
+                    </div>
+                </div>
+                <h2>Or Add a New Game</h2>
+                <form novalidate class="simple-form">
+                    Url <input type="text" ng-model="newGame.url" /><br />
+                    Team Number <input type="text" ng-model="newGame.number" /><br />
+                    Direction <input type="text" ng-model="newGame.direction" /><br />
+                    <input type="submit" ng-click="submit(newGame); disableSave = false" value="Save" ng-disabled='disableSave'/>
+                </form>
+            </div>
+            <div id= "Game" >
+                    <ng-include ng-if="selectedId.id === ''" src="'/client/views/noSelectedGame.ejs'"></ng-include> 
+                    <ng-include src="'/client/views/gameGrid.ejs'"></ng-include> 
+            </div>
+        </div>
+    <!--</div>-->

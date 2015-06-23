@@ -1,4 +1,3 @@
-hi
 <div class="content-container-fluid" ng-controller= "game.controller.grid">
     <div class="row">
         <div class="cols-sample-area">
@@ -12,31 +11,57 @@ hi
 </div>
 
 <script id="treeTemplate" type="text/x-jsrender">
-    <center>
-        <table style='width: 350px' align='center' frame='border' cellpadding='10' width='400' style='font-size:120%' >
-            <tr>
-                <td> Dealer: {{>dealer}}<br/> Vul: {{>vulnerable}} <br/> </td>
-                <td> <i>North</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>nHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>nHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>nHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>nHand.clubs}}</font> </td>
-                 <td> </td>
-            </tr>
-            <tr>
-                <td> <i>West</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>wHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>wHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>wHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>wHand.clubs}}</font> </td>
-                <td> </td>
-                <td> <i>East</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>eHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>eHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>eHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>eHand.clubs}}</font> </td>
-            </tr>
-            <tr>
-                <td> </td>
-                <td> <i>South</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>sHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>sHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>sHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>sHand.clubs}}</font> </td>
-                <td> </td>
-             </tr>
-        </table>
-        <p>
-        {{for doubleDummy.results }}
-        {{>#data}}; 
-        {{/for}}
-        Par: {{>doubleDummy.parScore}}: {{>doubleDummy.parContract}} 
-        </p>
+    
+        <div class=center>
+            <div class='game-table-container'>
+                <table  class='game-table' frame='border' cellpadding='10' width='400' align='center' >
+                    <tr>
+                        <td> Dealer: {{>dealer}}<br/> Vul: {{>vulnerable}} <br/> </td>
+                        <td> <i>North</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>nHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>nHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>nHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>nHand.clubs}}</font> </td>
+                         <td> </td>
+                    </tr>
+                    <tr>
+                        <td> <i>West</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>wHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>wHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>wHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>wHand.clubs}}</font> </td>
+                        <td> </td>
+                        <td> <i>East</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>eHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>eHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>eHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>eHand.clubs}}</font> </td>
+                    </tr>
+                    <tr>
+                        <td> </td>
+                        <td> <i>South</i> <br/> <font style='color:black;font-weight:bold'>&spades; {{>sHand.spades}}</font> <br/> <font style='color:red;font-weight:bold'>&hearts; {{>sHand.hearts}}</font> <br/> <font style='color:brown;font-weight:bold'>&diams; {{>sHand.diamonds}}</font> <br/> <font style='color:green;font-weight:bold'>&clubs; {{>sHand.clubs}}</font> </td>
+                        <td> </td>
+                     </tr>
+                </table>
+            <p>
+                {{for doubleDummy.results }}
+                    {{>#data}}; 
+                {{/for}}
+                Par: {{>doubleDummy.parScore}}: {{>doubleDummy.parContract}} 
+            </p>
+            </div>
+                <table class = "lead-table">
+                    <tr>
+                        <th>
+                            Lead
+                        </th>
+                         <th>
+                            Number of possible defender tricks
+                        </th>
+                    </tr>
+                    {{for leadTable }}
+                        <tr>
+                            <td>
+                                {{>#data.lead}} 
+                            </td>
+                             <td>
+                                {{>#data.numberMade}} 
+                            </td>
+                        </tr>
+                    {{/for}}
+                </table>
+        </div>
+
         
-    </center>
-        <div id='innerGrid'></div>
+        <div id="grid-container" style="width:100%; clear:both">
+            <div id='innerGrid'></div>
+        </div>
 </script>

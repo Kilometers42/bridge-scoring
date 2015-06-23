@@ -1,10 +1,14 @@
 var cheerio = require('cheerio');
 var request = require('request');
+var mongoose = require('mongoose');
 var analyzer = require('../logic/analyzer.js');
+var GameModel = require('../Models/GameModel.js')
 
 module.exports = { 
     parse: function (newGame, cb){
-      var game = {boards: []};
+      var game = new GameModel({});
+      game.boards = [];
+      game._id = mongoose.Types.ObjectId();
       request(newGame.url, function (error, response, html) {
         if (!error && response.statusCode == 200) {
           var $ = cheerio.load(html);
@@ -287,16 +291,19 @@ function DoubleDummyObject(ddString){
 }
 
 function setupTeam (game, number, direction) {
-  var directionNumber;
+  var directionNumber, directionLetters;
   var firstTime = true;
   game.direction = direction;
   if (direction.match(/[NS]/)!== null) {
-    directionNumber = 0;  
+    directionNumber = 0; 
+    directionLetters = 'NS';
   } else {
     directionNumber = 1;
+    directionLetters = 'EW';
   }
   for (var i in game.boards) {
     var curBoard = game.boards[i];
+    curBoard.playersDirection = directionLetters;
     for (var x in curBoard.result.table) {
       var curTeams = curBoard.result.table[x].teams;
       curTeams=curTeams.split('vs ');
@@ -310,6 +317,7 @@ function setupTeam (game, number, direction) {
             curBoard.nsPoints = curBoard.result.table[x].nsPoints;
             curBoard.score = curBoard.result.table[x].score;
             curBoard.teams = curBoard.result.table[x].teams;
+            curBoard.lead = curBoard.lead.replace(/\s/g,' ')
             if (firstTime){
               game.team = curTeams[directionNumber];
               firstTime = false;
